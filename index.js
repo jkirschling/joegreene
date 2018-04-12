@@ -1,6 +1,10 @@
 console.log("hello worlds");
 console.log("test");
 
+const express = require('express')
+const app = express();
+const http = require('http').Server(app);
+
 
 var CHARS = '0123456789ABCDEF'.split(''),
 FORMAT = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.split(''),
@@ -49,11 +53,17 @@ let cname = "bobsyouruncle";
 let cvalue = uuid4v7();
 let exdays = 4;
 
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-//  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    console.log(cname + "=" + cvalue + ";" + expires + ";path=/");
-}
-setCookie(cname, cvalue, exdays);
+app.get('/', function(req, res) {
+    res.cookie(cname, cvalue);
+    res.sendFile(__dirname + '/public/index.html');
+});
+
+http.listen(3000, function () {
+    console.log('listening on *:3000');
+});
+
+// function createCookieValue(cvalue, exdays) {
+//     var d = new Date();
+//     d.setTime(d.getTime() + (exdays*24*60*60*1000));
+//     var expires = "expires="+ d.toUTCString();
+// }
